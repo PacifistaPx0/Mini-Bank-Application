@@ -17,7 +17,7 @@ public class bank {
 
 		while (true) {
 			System.out.println(
-				"\n ->|| Welcome to InBank ||<- \n");
+				"\n ->|| Welcome to RBank ||<- \n");
 			System.out.println("1)Create Account");
 			System.out.println("2)Login Account");
 
@@ -32,7 +32,7 @@ public class bank {
 							"Enter Unique UserName:");
 						name = sc.readLine();
 						System.out.print(
-							"Enter New Password:");
+							"Enter New Passcode:");
 						pass_code = Integer.parseInt(
 							sc.readLine());
 
@@ -49,6 +49,32 @@ public class bank {
 					catch (Exception e) {
 						System.out.println(
 							" ERR : Enter Valid Data::Insertion Failed!\n");
+					}
+					break;
+				case 2:
+					try {
+						System.out.print(
+							"Enter UserName:");
+						name = sc.readLine();
+						System.out.print(
+							"Enter Passcode:");
+						pass_code = Integer.parseInt(
+							sc.readLine());
+
+						if (BankManagement.login(
+							name, pass_code)) {
+							System.out.println(
+							"MSG : You have successfully logged in\n");
+						}
+						else {
+							System.out.println(
+								"ERR : Login failed!\n");
+						}
+					}
+					catch(Exception e){
+						System.out.println(
+							"ERR: Wrong Username/Passcode"
+						);
 					}
 					break;
 				}

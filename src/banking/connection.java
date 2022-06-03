@@ -16,7 +16,7 @@ public class connection {
 			String url
 				= "jdbc:mysql://localhost:3306/bank"; //mysql url
 			String user = "root";	 //mysql username
-			String pass = "*****"; //mysql passcode
+			String pass = "Password"; //mysql passcode
 			Class.forName(mysqlJDBCDriver);
 			con = DriverManager.getConnection(url, user, pass);
 		}
