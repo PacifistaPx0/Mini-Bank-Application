@@ -60,8 +60,6 @@ public class BankManagement { // these class provides all
 		return false;
 	}
 
-
-
 	public static boolean
 	login(String name, int passCode) // accept user name and passcode
 	{ 	
