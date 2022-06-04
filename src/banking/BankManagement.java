@@ -61,10 +61,10 @@ public class BankManagement { // these class provides all
 		return false;
 	}
 
-	public static boolean
+	public static boolean //boolean is false by default
 	login(String name, int passCode) // accept user name and passcode
 	{ 	
-
+		
 		try{
 			if (name == "" || passCode == NULL) {
 				System.out.println("All Field Required!");
@@ -76,6 +76,7 @@ public class BankManagement { // these class provides all
 			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
 			ResultSet rs = stmt.executeQuery(sql);
         	if (rs.next()) { 
+				System.out.println("-----------------------------------------------------------");
 				System.out.println("Hello "+ rs.getString(3)+"!");
 				while (true){
 					try{
@@ -93,15 +94,16 @@ public class BankManagement { // these class provides all
 							BankManagement.DataRetriever(name);
 						}
 
-						if (user_input == 3){
+						else if (user_input == 3){
 							System.out.println("You have successfully logged out");
-							break;
+							break; // breaks out of the if loop
 						}
 					}
 					catch(Exception e){
 						e.printStackTrace();
 					}
 				}
+				return true; //returns true which means successful 
 			} 
 			else {
 				return false;
