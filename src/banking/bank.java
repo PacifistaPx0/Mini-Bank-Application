@@ -17,7 +17,7 @@ public class bank {
 
 		while (true) {
 			System.out.println(
-				"\n ->|| Welcome to RBank ||<- \n");
+				"\n || Welcome to RBank || \n");
 			System.out.println("1)Create Account");
 			System.out.println("2)Login Account");
 

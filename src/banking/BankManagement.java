@@ -2,10 +2,11 @@ package banking;
 
 import java.util.Random;
 
+import javax.print.PrintException;
+
 import com.mysql.cj.Query;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,24 +70,42 @@ public class BankManagement { // these class provides all
 				System.out.println("All Field Required!");
 				return false;
 			}
-
+			Scanner sc = new Scanner(System.in); //scanner for user input
 			
-			// query
-            /*sql = "select * from customer where ac_name='"
-                  + name + "' and passcode=" + passCode;
-			PreparedStatement st = con.prepareStatement(sql);
-			ResultSet rj = st.executeQuery();
-			System.out.println(rj);*/
+			sql = "select * from customer where ac_name = '"+name+"'";
+			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
+			ResultSet rs = stmt.executeQuery(sql);
+        	if (rs.next()) { 
+				System.out.println("Hello "+ rs.getString(3)+"!");
+				while (true){
+					try{
+						System.out.println("Select an option");
+						System.out.println("-----------------------------------------------------------");
+						
+						System.out.println("1) Account Details");
+						System.out.println("2) Transfer");
+						System.out.println("3) Logout");
 
-			DataRetriever dr = new DataRetriever(name); //Testing Data retriever instance
-			ResultSet rs = dr.getResultSet();
-        	while (rs.next()) { //printing specific column of user data where name
-				System.out.println("Account number: "+ rs.getString(2));
-                System.out.println("Account name: " + rs.getString(3));
-                System.out.println("Balance: " + rs.getString(4));
-        	}
+						System.out.println("-----------------------------------------------------------");
 
-			return true;
+						int user_input = sc.nextInt();//request user input
+						if (user_input == 1){
+							BankManagement.DataRetriever(name);
+						}
+
+						if (user_input == 3){
+							System.out.println("You have successfully logged out");
+							break;
+						}
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+			} 
+			else {
+				return false;
+			}
 
 		}
 		catch(Exception e){
@@ -94,22 +113,22 @@ public class BankManagement { // these class provides all
 		}
 		return false;
 	}
-}
-class DataRetriever { //class for retrieving user data
-
-	private ResultSet rs;
-	static Connection con = connection.getConnection();
-    DataRetriever(String name) {
+	public static void DataRetriever(String name) {
 		
         try {
-            Statement stmt = con.createStatement();
-            rs = stmt.executeQuery("select * from customer where ac_name = '"+name+"'");
+			sql = "select * from customer where ac_name = '"+name+"'";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+			while(rs.next()){
+				System.out.println("Account number: "+ rs.getString(2));
+				System.out.println("Account name: " + rs.getString(3));
+				System.out.println("Balance: " + rs.getString(4));
+			}
         }
         catch(Exception e) {
             e.printStackTrace();
         }
 	}
-	public ResultSet getResultSet() {
-		return rs;	//accessor method to return ResultSet rs 
-	}
 }
+
