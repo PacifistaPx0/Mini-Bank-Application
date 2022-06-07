@@ -8,7 +8,6 @@ use bank;
     passcode int default null,
     primary key(id)) */
     
-alter table customer 
-add unique(ac_name);
+
 
 select * from customer;
