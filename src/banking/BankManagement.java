@@ -41,8 +41,9 @@ public class BankManagement { // these class provides all
         	}
 
 			// query
-			Statement st = con.createStatement();
 			sql = "insert into customer(ac_no, ac_name, balance, passcode) values('"+ card +"', '"+ name +"', 1000.00, "+ passCode +")";
+			PreparedStatement st = con.prepareStatement(sql);
+			
 
 			// Execution
 			if (st.executeUpdate(sql) == 1) {
@@ -84,8 +85,9 @@ public class BankManagement { // these class provides all
 						System.out.println("-----------------------------------------------------------");
 						
 						System.out.println("1) Account Details");
-						System.out.println("2) Transfer");
-						System.out.println("3) Logout");
+						//System.out.println("2) Transfer");
+						System.out.println("3) Deposit");
+						System.out.println("5) Logout");
 
 						System.out.println("-----------------------------------------------------------");
 
@@ -94,7 +96,11 @@ public class BankManagement { // these class provides all
 							BankManagement.DataRetriever(name);
 						}
 
-						else if (user_input == 3){
+						else if(user_input==3){
+							BankManagement.deposit(name);
+						}
+
+						else if (user_input == 5){
 							System.out.println("You have successfully logged out");
 							break; // breaks out of the if loop
 						}
@@ -115,6 +121,8 @@ public class BankManagement { // these class provides all
 		}
 		return false;
 	}
+
+	//getting user info 
 	public static void DataRetriever(String name) {
 		
         try {
@@ -131,6 +139,43 @@ public class BankManagement { // these class provides all
         catch(Exception e) {
             e.printStackTrace();
         }
+	}
+	public static void deposit(String name){
+		Scanner sc = new Scanner(System.in);
+		double balance;
+		double newValue;
+		try{
+			sql = "select balance from customer where ac_name = '"+name+"'";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			while(true){
+				System.out.println("Please Enter an amount you wish to deposit");
+				int user_input = sc.nextInt();
+				if(user_input>10000000){
+					System.out.println("Maximum amount possble for deposition exceeded. The limit is 10,000,000");
+				} else {
+					// getting user balance and updating it with deposited amount
+					double i = user_input;
+					while(rs.next()){
+						newValue = rs.getInt(1);
+						balance = newValue + i;
+						sql = "update customer set balance = '"+balance+"' where ac_name = '"+name+"'";
+						PreparedStatement st = con.prepareStatement(sql);
+
+						if(st.executeUpdate()==1){
+							System.out.println("Your account has been deposited. Your new balance is "+ balance);
+						}
+					}
+					
+				}
+				break;
+			}
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+
 	}
 }
 

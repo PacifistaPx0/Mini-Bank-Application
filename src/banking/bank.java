@@ -64,7 +64,7 @@ public class bank {
 						if (BankManagement.login(
 							name, pass_code)) {
 							System.out.println(
-							"MSG : You have successfully logged in\n");
+							" ");
 						}
 						else {
 							System.out.println(
