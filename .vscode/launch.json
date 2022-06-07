@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch bank",
+            "request": "launch",
+            "mainClass": "banking.bank",
+            "projectName": "Mini-Bank-Application_7d49ea87"
+        },
+        {
+            "type": "java",
+            "name": "Launch dump",
+            "request": "launch",
+            "mainClass": "banking.dump",
+            "projectName": "Mini-Bank-Application_7d49ea87"
+        },
+        {
+            "type": "java",
+            "name": "Launch dump2",
+            "request": "launch",
+            "mainClass": "banking.dump2",
+            "projectName": "Mini-Bank-Application_7d49ea87"
+        }
+    ]
+}

@@ -2,10 +2,11 @@ package banking;
 
 import java.util.Random;
 
+import javax.print.PrintException;
+
 import com.mysql.cj.Query;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,6 +26,8 @@ public class BankManagement {
 
 	static Connection con = MySQLConnection.getConnection();
 	static String sql = "";
+	
+	private static DataRetriever dataRetriever = new DataRetriever();
 
 	/**
 	 * returns a boolean value accepts user name and passcode
@@ -48,9 +51,10 @@ public class BankManagement {
 			}
 
 			// query
-			Statement st = con.createStatement();
 			sql = "insert into customer(ac_no, ac_name, balance, passcode) values('" + card + "', '" + name
 					+ "', 1000.00, " + passCode + ")";
+			PreparedStatement st = con.prepareStatement(sql);
+			
 
 			// Execution
 			if (st.executeUpdate(sql) == 1) {
@@ -67,38 +71,62 @@ public class BankManagement {
 	}
 
 	/**
-	 * accept user name and passcode
+	 * accept user name and passcode boolean is false by default
 	 * 
 	 * @param name
 	 * @param passCode
 	 * @return
 	 */
 	public static boolean login(String name, int passCode) {
-
+		
 		try {
 			if (name == "" || passCode == NULL) {
 				System.out.println("All Field Required!");
 				return false;
 			}
+			Scanner sc = new Scanner(System.in); //scanner for user input
+			
+			sql = "select * from customer where ac_name = '"+name+"'";
+			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
+			ResultSet rs = stmt.executeQuery(sql);
+        	if (rs.next()) { 
+				System.out.println("-----------------------------------------------------------");
+				System.out.println("Hello "+ rs.getString(3)+"!");
+				while (true){
+					try{
+						System.out.println("Select an option");
+						System.out.println("-----------------------------------------------------------");
+						
+						System.out.println("1) Account Details");
+						//System.out.println("2) Transfer");
+						System.out.println("3) Deposit");
+						System.out.println("5) Logout");
 
-			// query
-			/*
-			 * sql = "select * from customer where ac_name='" + name + "' and passcode=" +
-			 * passCode; PreparedStatement st = con.prepareStatement(sql); ResultSet rj =
-			 * st.executeQuery(); System.out.println(rj);
-			 */
+						System.out.println("-----------------------------------------------------------");
 
-			// Testing Data retriever instance
-			DataRetriever dr = new DataRetriever(name);
-			ResultSet rs = dr.getResultSet();
-			// printing specific column of user data where name
-			while (rs.next()) {
-				System.out.println("Account number: " + rs.getString(2));
-				System.out.println("Account name: " + rs.getString(3));
-				System.out.println("Balance: " + rs.getString(4));
+						int user_input = sc.nextInt();//request user input
+						if (user_input == 1){
+							dataRetriever.getCustomers(name);
+						}
+						else if(user_input==3){
+							dataRetriever.deposit(name);
+						}
+
+						else if (user_input == 5){
+							System.out.println("You have successfully logged out");
+							break; // breaks out of the if loop
+						}
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+				// returns true which means successful 
+				return true; 
+			} 
+			else {
+				return false;
 			}
-
-			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
