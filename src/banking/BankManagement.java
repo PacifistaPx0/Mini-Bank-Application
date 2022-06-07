@@ -98,7 +98,7 @@ public class BankManagement {
 						System.out.println("-----------------------------------------------------------");
 						
 						System.out.println("1) Account Details");
-						//System.out.println("2) Transfer");
+						System.out.println("2) Withdraw");
 						System.out.println("3) Deposit");
 						System.out.println("5) Logout");
 
@@ -108,6 +108,11 @@ public class BankManagement {
 						if (user_input == 1){
 							dataRetriever.getCustomers(name);
 						}
+
+						else if(user_input==2){
+							dataRetriever.withdrawal(name);
+						}
+
 						else if(user_input==3){
 							dataRetriever.deposit(name);
 						}

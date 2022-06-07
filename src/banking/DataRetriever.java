@@ -10,7 +10,6 @@ import java.util.Scanner;
  */
 public class DataRetriever {
 
-	private ResultSet rs;
 	static Connection con = MySQLConnection.getConnection();
 
 	public void getCustomers(String name) {
@@ -66,12 +65,32 @@ public class DataRetriever {
 
 	}
 
-	/**
-	 * accessor method to return ResultSet rs
-	 * 
-	 * @return
-	 */
-	public ResultSet getResultSet() {
-		return rs;
+	public void withdrawal(String name){
+		Scanner sc = new Scanner(System.in);
+		double newValue;
+		try {
+			String sql = "select balance from customer where ac_name = '" + name + "'";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				System.out.println("Input an amount you wish to withdraw");
+				int user_input = sc.nextInt();
+				newValue = rs.getInt(1);
+				if (user_input >=  newValue ){
+					System.out.println("Insufficient balance!");
+				} else {
+					newValue -= user_input; 
+					sql = "update customer set balance = '" + newValue + "' where ac_name = '" + name + "'";
+					PreparedStatement st = con.prepareStatement(sql);
+					if (st.executeUpdate() == 1) {
+						System.out.println("You have successfully withdrawn "+ user_input);
+						System.out.println("Your new balance is " + newValue);
+					}
+				}
+			}
+		} 
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 }
