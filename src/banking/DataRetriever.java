@@ -63,7 +63,6 @@ public class DataRetriever {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		sc.close();
 
 	}
 
@@ -94,7 +93,6 @@ public class DataRetriever {
 		catch (Exception e){
 			e.printStackTrace();
 		}
-		sc.close();
 	}
 
 	public void transfer(String name){
@@ -128,7 +126,6 @@ public class DataRetriever {
 					}
 				}
 			}
-			sc.close();
 		}
 		catch (InputMismatchException e){
 			System.out.println("Invalid input!");;
