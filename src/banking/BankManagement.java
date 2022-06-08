@@ -82,11 +82,10 @@ public class BankManagement {
 		try {
 			if (name == "" || passCode == NULL) {
 				System.out.println("All Field Required!");
-				sc.close();
 				return false;
 			}
 			
-			sql = "select * from customer where ac_name = '"+name+"'";
+			sql = "select * from customer where ac_name = '"+name+"' and passCode = '"+passCode+"'";
 			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
 			ResultSet rs = stmt.executeQuery(sql);
         	if (rs.next()) { 
