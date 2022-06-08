@@ -2,17 +2,17 @@ package banking;
 
 import java.util.Random;
 
-import javax.print.PrintException;
+//import javax.print.PrintException;
 
-import com.mysql.cj.Query;
+//import com.mysql.cj.Query;
 
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+//import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Statement;
+//import java.sql.Statement;
 
 /**
  * these class provides all bank method
@@ -45,8 +45,8 @@ public class BankManagement {
 
 			// generate account number for user
 			Random rand = new Random();
-			for (int i = 0; i < 10; i++) {
-				int n = rand.nextInt(10) + 0;
+			for (int i = 0; i < 8; i++) {
+				int n = rand.nextInt(8) + 0;
 				card += Integer.toString(n);
 			}
 
@@ -78,13 +78,13 @@ public class BankManagement {
 	 * @return
 	 */
 	public static boolean login(String name, int passCode) {
-		
+		Scanner sc = new Scanner(System.in); //scanner for user input
 		try {
 			if (name == "" || passCode == NULL) {
 				System.out.println("All Field Required!");
+				sc.close();
 				return false;
 			}
-			Scanner sc = new Scanner(System.in); //scanner for user input
 			
 			sql = "select * from customer where ac_name = '"+name+"'";
 			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
@@ -100,6 +100,7 @@ public class BankManagement {
 						System.out.println("1) Account Details");
 						System.out.println("2) Withdraw");
 						System.out.println("3) Deposit");
+						System.out.println("4) Transfer");
 						System.out.println("5) Logout");
 
 						System.out.println("-----------------------------------------------------------");
@@ -115,6 +116,10 @@ public class BankManagement {
 
 						else if(user_input==3){
 							dataRetriever.deposit(name);
+						}
+
+						else if(user_input==4){
+							dataRetriever.transfer(name);
 						}
 
 						else if (user_input == 5){

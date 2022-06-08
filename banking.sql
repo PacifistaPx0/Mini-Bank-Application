@@ -8,6 +8,4 @@ use bank;
     passcode int default null,
     primary key(id)) */
     
-
-
 select * from customer;

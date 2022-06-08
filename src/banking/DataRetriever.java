@@ -3,6 +3,7 @@ package banking;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -62,6 +63,7 @@ public class DataRetriever {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		sc.close();
 
 	}
 
@@ -89,6 +91,48 @@ public class DataRetriever {
 				}
 			}
 		} 
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		sc.close();
+	}
+
+	public void transfer(String name){
+		Scanner sc = new Scanner(System.in);
+		double userBalance;
+		try{
+			String sql = "select balance from customer where ac_name = '"+name+"'";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				System.out.println("Input user account number you wish to transfer to");
+				int receiverAccount = sc.nextInt();
+				System.out.println("Input amount");
+				double amount = sc.nextDouble();
+
+				userBalance = rs.getInt(1);
+				if(amount >= userBalance){
+					System.out.println("Insufficient funds");
+				} else {
+
+					//debit user account and update receiver's account
+					sql = "update customer set balance=balance+'" + amount + "' where ac_no='"+receiverAccount+"'";
+					PreparedStatement st = con.prepareStatement(sql);
+
+					if (st.executeUpdate() == 1) {
+						System.out.println("Transaction successul!");
+						sql = "update customer set balance=balance-'" + amount + "' where ac_name='"+name+"'";
+            			st.executeUpdate(sql);
+					} else{
+						System.out.println("Invalid transaction. The account number does not exist.");
+					}
+				}
+			}
+			sc.close();
+		}
+		catch (InputMismatchException e){
+			System.out.println("Invalid input!");;
+		}
 		catch (Exception e){
 			e.printStackTrace();
 		}
