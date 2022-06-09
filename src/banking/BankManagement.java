@@ -83,9 +83,11 @@ public class BankManagement {
 				return false;
 			}
 			
-			sql = "select * from customer where ac_name = '"+name+"' and passCode = '"+passCode+"'";
-			PreparedStatement stmt = con.prepareStatement(sql); // prepared statement much better than statement
-			ResultSet rs = stmt.executeQuery(sql);
+			sql = "select * from customer where ac_name = ? and passCode = ?";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1,name);
+			stmt.setInt(2, passCode);
+			ResultSet rs = stmt.executeQuery(); //executeQuery for resultset
         	if (rs.next()) { 
 				System.out.println("-----------------------------------------------------------");
 				System.out.println("Hello "+ rs.getString(3)+"!");
