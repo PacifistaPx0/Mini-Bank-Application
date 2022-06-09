@@ -21,9 +21,6 @@ public class BankManagement {
 
 	private static final int NULL = 0;
 
-	// variable to generate user account number
-	private static String card = "";
-
 	static Connection con = MySQLConnection.getConnection();
 	static String sql = "";
 	
@@ -37,30 +34,31 @@ public class BankManagement {
 	 * @return
 	 */
 	public static boolean createAccount(String name, int passCode) {
+		//For generating user account number
+		String card = "";
+		Random rand = new Random();
+		for (int i = 0; i < 8; i++) {
+			int n = rand.nextInt(8) + 0;
+			card += Integer.toString(n);
+		}
+
 		try {
 			if (name == "" || passCode == NULL) {
 				System.out.println("All Field Required!");
 				return false;
 			}
 
-			// generate account number for user
-			Random rand = new Random();
-			for (int i = 0; i < 8; i++) {
-				int n = rand.nextInt(8) + 0;
-				card += Integer.toString(n);
-			}
 
-			// query
-			sql = "insert into customer(ac_no, ac_name, balance, passcode) values('" + card + "', '" + name
-					+ "', 1000.00, " + passCode + ")";
+			// query using prepared statement to prevent injection
+			sql = "insert into customer(ac_no, ac_name, balance, passcode) values(?,?,?,?)";
 			PreparedStatement st = con.prepareStatement(sql);
-			
-
-			// Execution
-			if (st.executeUpdate(sql) == 1) {
-				System.out.println(name + ", Now You Login!");
-				return true;
-			}
+			st.setInt(1, Integer.parseInt(card));
+			st.setString(2, name);
+			st.setDouble(3, 1000.00);
+			st.setInt(4, passCode);
+			st.executeUpdate();
+			System.out.println("Now you login!");
+			return true;
 			// return
 		} catch (SQLIntegrityConstraintViolationException e) {
 			System.out.println("Username Not Available!");
