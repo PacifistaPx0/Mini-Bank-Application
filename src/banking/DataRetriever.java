@@ -15,9 +15,10 @@ public class DataRetriever {
 
 	public void getCustomers(String name) {
 		try {
-			String sql = "select * from customer where ac_name = '" + name + "'";
+			String sql = "select * from customer where ac_name = ?";
 			PreparedStatement stmt = con.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery(sql);
+			stmt.setString(1, name);
+			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				System.out.println("Account number: " + rs.getString(2));
@@ -34,9 +35,10 @@ public class DataRetriever {
 		double balance;
 		double newValue;
 		try {
-			String sql = "select balance from customer where ac_name = '" + name + "'";
+			String sql = "select balance from customer where ac_name = ?";
 			PreparedStatement stmt = con.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery(sql);
+			stmt.setString(1, name);
+			ResultSet rs = stmt.executeQuery();
 			while (true) {
 				System.out.println("Please Enter an amount you wish to deposit");
 				int user_input = sc.nextInt();
@@ -48,19 +50,23 @@ public class DataRetriever {
 					while (rs.next()) {
 						newValue = rs.getInt(1);
 						balance = newValue + i;
-						sql = "update customer set balance = '" + balance + "' where ac_name = '" + name + "'";
+						sql = "update customer set balance = ? where ac_name = ?";
 						PreparedStatement st = con.prepareStatement(sql);
-
-						if (st.executeUpdate() == 1) {
-							System.out.println("Your account has been deposited. Your new balance is " + balance);
-						}
+						st.setDouble(1, balance);
+						st.setString(2, name);
+						st.executeUpdate();
+						System.out.println("Your account has been deposited. Your new balance is " + balance);
 					}
 
 				}
 				break;
 			}
 
-		} catch (Exception e) {
+		} 
+		catch (InputMismatchException e){
+			System.out.println("Invalid input!");;
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -70,9 +76,10 @@ public class DataRetriever {
 		Scanner sc = new Scanner(System.in);
 		double newValue;
 		try {
-			String sql = "select balance from customer where ac_name = '" + name + "'";
+			String sql = "select balance from customer where ac_name = ?";
 			PreparedStatement stmt = con.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery(sql);
+			stmt.setString(1, name);
+			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
 				System.out.println("Input an amount you wish to withdraw");
 				int user_input = sc.nextInt();
@@ -90,6 +97,9 @@ public class DataRetriever {
 				}
 			}
 		} 
+		catch (InputMismatchException e){
+			System.out.println("Invalid input!");;
+		}
 		catch (Exception e){
 			e.printStackTrace();
 		}
